@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FashionHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f7f7f7;color:#222}
+
+/* NAV */
+.nav{background:#fff;padding:12px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:22px;color:#e91e8c;letter-spacing:-0.5px;min-width:140px}
+.search{flex:1;max-width:400px;border:1.5px solid #eee;border-radius:24px;padding:8px 18px;font-size:13px;outline:none;font-family:'DM Sans',sans-serif}
+.search:focus{border-color:#e91e8c}
+.nav-cats{display:flex;gap:20px;margin-left:12px}
+.nav-cats span{font-size:13px;color:#555;cursor:pointer;padding:4px 0}
+.nav-cats span.active{color:#e91e8c;font-weight:600;border-bottom:2px solid #e91e8c}
+.nav-icons{margin-left:auto;display:flex;gap:18px;align-items:center}
+.nav-icon{font-size:12px;color:#444;cursor:pointer;display:flex;align-items:center;gap:4px;position:relative}
+.badge{background:#e91e8c;color:#fff;border-radius:50%;width:17px;height:17px;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+
+/* BREADCRUMB */
+.breadcrumb{padding:8px 24px;font-size:11px;color:#999;background:#fafafa;border-bottom:1px solid #eee}
+.breadcrumb span{color:#e91e8c}
+
+/* LAYOUT */
+.layout{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:200px;min-width:200px;background:#fff;padding:16px;border-right:1px solid #eee;min-height:calc(100vh - 100px)}
+.sb-section{margin-bottom:18px}
+.sb-title{font-size:10px;font-weight:700;color:#aaa;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px}
+.sb-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#555;margin:6px 0;cursor:pointer}
+.sb-item input{accent-color:#e91e8c}
+.sb-item.active{color:#e91e8c;font-weight:600}
+.sub{margin-left:18px;font-size:11px;color:#777;padding:3px 0;cursor:pointer}
+.sub:hover{color:#e91e8c}
+.size-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.sz{border:1px solid #ddd;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;background:#fff;color:#555}
+.sz.on{background:#e91e8c;color:#fff;border-color:#e91e8c}
+.price-slider{width:100%;accent-color:#e91e8c;margin:6px 0}
+.price-labels{display:flex;justify-content:space-between;font-size:10px;color:#aaa}
+.del-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555;margin:5px 0;cursor:pointer}
+.del-item input{accent-color:#e91e8c}
+
+/* CONTENT */
+.content{flex:1;padding:16px}
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;background:#fff;padding:10px 14px;border-radius:10px;flex-wrap:wrap}
+.filter-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.tag{background:#fff0f7;border:1px solid #f9a;border-radius:20px;padding:3px 10px;font-size:11px;color:#e91e8c;cursor:pointer;display:flex;align-items:center;gap:3px}
+.sort-sel{border:1px solid #eee;border-radius:6px;padding:5px 10px;font-size:12px;outline:none;font-family:'DM Sans',sans-serif}
+.grid-btns{display:flex;gap:4px}
+.gb{border:1px solid #ddd;background:#fff;border-radius:5px;padding:5px 8px;cursor:pointer;font-size:13px}
+.gb.on{background:#e91e8c;color:#fff;border-color:#e91e8c}
+
+/* PRODUCT GRID */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s}
+.card:hover{box-shadow:0 6px 24px rgba(233,30,140,0.13);transform:translateY(-2px)}
+.card-img{position:relative;height:200px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:60px;overflow:hidden}
+.card-badge{position:absolute;top:10px;left:10px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;color:#fff}
+.badge-new{background:#222}
+.badge-hot{background:#ff3d00}
+.badge-popular{background:#1565c0}
+.badge-premium{background:#6a1b9a}
+.wish-btn{position:absolute;top:10px;right:10px;background:#fff;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.12);transition:transform 0.2s}
+.wish-btn:hover{transform:scale(1.15)}
+.wish-btn.on{color:#e91e8c}
+.card-body{padding:10px 12px 12px}
+.card-brand{font-size:10px;color:#aaa;margin-bottom:2px}
+.card-name{font-size:13px;font-weight:600;margin-bottom:5px;line-height:1.3;color:#222}
+.card-rating{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.stars{background:#2e7d32;color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.reviews{font-size:10px;color:#aaa}
+.card-prices{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.price-now{font-size:14px;font-weight:700;color:#222}
+.price-old{font-size:11px;color:#bbb;text-decoration:line-through}
+.price-off{font-size:11px;color:#2e7d32;font-weight:600}
+.free-del{font-size:10px;color:#2e7d32;margin-bottom:8px}
+.card-btns{display:flex;gap:7px}
+.btn-cart{flex:1;border:1.5px solid #e91e8c;background:#fff;color:#e91e8c;border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s}
+.btn-cart:hover{background:#fff0f7}
+.btn-buy{flex:1;background:#e91e8c;color:#fff;border:none;border-radius:7px;padding:6px 0;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s}
+.btn-buy:hover{background:#c2185b}
+
+/* PAGES */
+.page{display:none;padding:20px 24px}
+.page.active{display:block}
+.page-title{font-family:'Playfair Display',serif;font-size:22px;color:#222;margin-bottom:16px}
+.empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
+.order-card,.cart-card,.wish-card{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:16px;border:1px solid #f0f0f0}
+.oc-emoji{font-size:36px}
+.oc-info{flex:1}
+.oc-name{font-weight:600;font-size:14px;color:#222}
+.oc-brand{font-size:11px;color:#aaa;margin-bottom:4px}
+.oc-price{font-size:15px;font-weight:700;color:#e91e8c}
+.oc-status{font-size:11px;color:#2e7d32;font-weight:500}
+.remove-btn{border:1px solid #eee;background:#fff;color:#aaa;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer}
+.remove-btn:hover{color:#e91e8c;border-color:#e91e8c}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;gap:5px;margin-top:20px}
+.pg{border:1px solid #ddd;background:#fff;border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.pg.on{background:#e91e8c;color:#fff;border-color:#e91e8c}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#222;color:#fff;padding:11px 20px;border-radius:10px;font-size:12px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'DM Sans',sans-serif}
+.toast.show{opacity:1}
+
+/* SCREEN TABS */
+.screen-nav{display:flex;gap:0;background:#fff;border-bottom:1px solid #eee}
+.snav{padding:10px 20px;font-size:13px;color:#777;cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.snav.active{color:#e91e8c;border-bottom:2px solid #e91e8c}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="logo">FashionHub</div>
+  <input class="search" type="text" placeholder="Search for clothes, brands..." id="searchInput" oninput="filterProds()">
+  <div class="nav-cats">
+    <span>Men</span><span class="active">Women</span><span>Kids</span><span>Beauty</span><span>Home</span><span>Sale</span>
+  </div>
+  <div class="nav-icons">
+    <span class="nav-icon" onclick="showPage('home')">🏠 Home</span>
+    <span class="nav-icon" onclick="showPage('wishlist')">❤️ Wishlist <span class="badge" id="wBadge">0</span></span>
+    <span class="nav-icon" onclick="showPage('cart')">🛒 Cart <span class="badge" id="cBadge">0</span></span>
+    <span class="nav-icon" onclick="showPage('orders')">📦 Orders <span class="badge" id="oBadge">0</span></span>
+  </div>
+</div>
+
+<!-- SCREEN NAV -->
+<div class="screen-nav">
+  <div class="snav active" onclick="showPage('home')">🏠 Products</div>
+  <div class="snav" onclick="showPage('cart')">🛒 My Cart</div>
+  <div class="snav" onclick="showPage('wishlist')">❤️ Wishlist</div>
+  <div class="snav" onclick="showPage('orders')">📦 My Orders</div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="breadcrumb">Home › Women › <span>All Clothing</span> — <span id="prodCount">5,134</span> products</div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-section">
+        <div class="sb-title">Category</div>
+        <label class="sb-item"><input type="checkbox" checked> All</label>
+        <label class="sb-item active"><input type="checkbox" checked> Dresses</label>
+        <div class="sub" onclick="filterCat('Ethnic')">Ethnic Wear</div>
+        <div class="sub" onclick="filterCat('Jeans')">Jeans</div>
+        <div class="sub" onclick="filterCat('Jackets')">Jackets</div>
+        <div class="sub" onclick="filterCat('Activewear')">Activewear</div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Price</div>
+        <input type="range" class="price-slider" min="500" max="5000" value="5000" id="priceRange" oninput="updatePrice(this.value)">
+        <div class="price-labels"><span>₹500</span><span id="priceVal">₹5,000</span></div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Size</div>
+        <div class="size-row">
+          <div class="sz" onclick="toggleSz(this)">XS</div>
+          <div class="sz" onclick="toggleSz(this)">S</div>
+          <div class="sz on" onclick="toggleSz(this)">M</div>
+          <div class="sz on" onclick="toggleSz(this)">L</div>
+          <div class="sz" onclick="toggleSz(this)">XL</div>
+          <div class="sz" onclick="toggleSz(this)">XXL</div>
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Brand</div>
+        <label class="sb-item"><input type="checkbox" checked> Zara</label>
+        <label class="sb-item"><input type="checkbox" checked> H&M</label>
+        <label class="sb-item"><input type="checkbox"> Biba</label>
+        <label class="sb-item"><input type="checkbox"> W for Women</label>
+        <label class="sb-item"><input type="checkbox"> Fabindia</label>
+        <label class="sb-item"><input type="checkbox"> Mango</label>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Delivery By</div>
+        <label class="del-item"><input type="radio" name="del"> Today</label>
+        <label class="del-item"><input type="radio" name="del" checked> Tomorrow</label>
+        <label class="del-item"><input type="radio" name="del"> 2–3 days</label>
+      </div>
+    </div>
+    <div class="content">
+      <div class="toolbar">
+        <div class="filter-tags">
+          <div class="tag">All ✕</div>
+          <div class="tag">Dresses ✕</div>
+          <div class="tag">Size: M, L ✕</div>
+          <div class="tag">Zara ✕</div>
+        </div>
+        <select class="sort-sel">
+          <option>Relevance</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Newest First</option>
+          <option>Top Rated</option>
+        </select>
+        <div class="grid-btns">
+          <button class="gb on">⊞</button>
+          <button class="gb">≡</button>
+        </div>
+      </div>
+      <div class="grid" id="productGrid"></div>
+      <div class="pagination">
+        <div class="pg">‹</div>
+        <div class="pg on">1</div>
+        <div class="pg">2</div>
+        <div class="pg">3</div>
+        <div class="pg">4</div>
+        <div class="pg">5</div>
+        <div class="pg">...</div>
+        <div class="pg">128</div>
+        <div class="pg">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="page-cart">
+  <div style="padding:20px 24px">
+    <div class="page-title">🛒 My Cart</div>
+    <div id="cartItems"><div class="empty">Cart is empty! Add some products.</div></div>
+  </div>
+</div>
+
+<!-- WISHLIST PAGE -->
+<div class="page" id="page-wishlist">
+  <div style="padding:20px 24px">
+    <div class="page-title">❤️ My Wishlist</div>
+    <div id="wishItems"><div class="empty">Wishlist is empty! Heart some products.</div></div>
+  </div>
+</div>
+
+<!-- ORDERS PAGE -->
+<div class="page" id="page-orders">
+  <div style="padding:20px 24px">
+    <div class="page-title">📦 My Orders</div>
+    <div id="orderItems"><div class="empty">No orders yet! Click Buy Now on any product.</div></div>
+  </div>
+</div>
+
+<script>
+const products = [
+  {id:1,brand:"Zara",name:"Floral Wrap Midi Dress",price:1499,orig:2999,disc:50,rating:4.2,reviews:2341,badge:"new",badgeText:"New",emoji:"👗",cat:"Dresses"},
+  {id:2,brand:"Biba",name:"Embroidered Kurta Set",price:999,orig:1999,disc:50,rating:4.5,reviews:987,badge:"",badgeText:"",emoji:"👘",cat:"Ethnic"},
+  {id:3,brand:"H&M",name:"Wide Leg Jeans",price:799,orig:1599,disc:50,rating:4.1,reviews:3201,badge:"hot",badgeText:"Hot",emoji:"👖",cat:"Jeans"},
+  {id:4,brand:"Mango",name:"Satin Slip Dress",price:2199,orig:3999,disc:45,rating:4.4,reviews:521,badge:"",badgeText:"",emoji:"✨",cat:"Dresses"},
+  {id:5,brand:"Global Desi",name:"Printed Boho Maxi Skirt",price:1499,orig:2999,disc:50,rating:4.0,reviews:673,badge:"popular",badgeText:"Popular",emoji:"🌸",cat:"Dresses"},
+  {id:6,brand:"W for Women",name:"Linen Blazer Jacket",price:2699,orig:4499,disc:40,rating:4.4,reviews:123,badge:"",badgeText:"",emoji:"🧥",cat:"Jackets"},
+  {id:7,brand:"H&M",name:"Oversized Graphic Tee",price:799,orig:1599,disc:50,rating:3.9,reviews:4500,badge:"",badgeText:"",emoji:"👕",cat:"Activewear"},
+  {id:8,brand:"Fabindia",name:"Silk Blend Saree",price:2299,orig:3799,disc:40,rating:4.7,reviews:302,badge:"premium",badgeText:"Premium",emoji:"🥻",cat:"Ethnic"}
+];
+
+let cart=[], wishlist=[], orders=[], currentList=[...products];
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function updateBadges(){
+  document.getElementById('wBadge').textContent=wishlist.length;
+  document.getElementById('cBadge').textContent=cart.length;
+  document.getElementById('oBadge').textContent=orders.length;
+}
+
+function showPage(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.snav').forEach(s=>s.classList.remove('active'));
+  document.getElementById('page-'+pg).classList.add('active');
+  const idx={home:0,cart:1,wishlist:2,orders:3}[pg];
+  document.querySelectorAll('.snav')[idx].classList.add('active');
+  if(pg==='cart') renderCart();
+  if(pg==='wishlist') renderWishlist();
+  if(pg==='orders') renderOrders();
+}
+
+function renderGrid(list){
+  document.getElementById('prodCount').textContent=list.length.toLocaleString();
+  document.getElementById('productGrid').innerHTML=list.map(p=>`
+    <div class="card">
+      <div class="card-img">
+        <span>${p.emoji}</span>
+        ${p.badge?`<div class="card-badge badge-${p.badge}">${p.badgeText}</div>`:''}
+        <button class="wish-btn ${wishlist.find(w=>w.id===p.id)?'on':''}" onclick="toggleWish(${p.id},event)">${wishlist.find(w=>w.id===p.id)?'❤️':'🤍'}</button>
+      </div>
+      <div class="card-body">
+        <div class="card-brand">${p.brand}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-rating">
+          <span class="stars">★ ${p.rating}</span>
+          <span class="reviews">(${p.reviews.toLocaleString()})</span>
+        </div>
+        <div class="card-prices">
+          <span class="price-now">₹${p.price.toLocaleString()}</span>
+          <span class="price-old">₹${p.orig.toLocaleString()}</span>
+          <span class="price-off">${p.disc}% off</span>
+        </div>
+        <div class="free-del">✓ Free Delivery</div>
+        <div class="card-btns">
+          <button class="btn-cart" onclick="addCart(${p.id})">🛒 Cart</button>
+          <button class="btn-buy" onclick="buyNow(${p.id})">⚡ Buy Now</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleWish(id,e){
+  e.stopPropagation();
+  const idx=wishlist.findIndex(w=>w.id===id);
+  if(idx===-1){wishlist.push(products.find(p=>p.id===id));showToast('Added to Wishlist ❤️');}
+  else{wishlist.splice(idx,1);showToast('Removed from Wishlist');}
+  updateBadges(); renderGrid(currentList);
+}
+
+function addCart(id){
+  if(!cart.find(c=>c.id===id)){cart.push(products.find(p=>p.id===id));showToast('Added to Cart 🛒');}
+  else showToast('Already in Cart!');
+  updateBadges();
+}
+
+function buyNow(id){
+  const prod=products.find(p=>p.id===id);
+  if(!orders.find(o=>o.id===id)) orders.push({...prod,status:'Confirmed',date:new Date().toLocaleDateString()});
+  updateBadges(); showToast('Order Placed! 🎉'); showPage('orders');
+}
+
+function renderCart(){
+  const el=document.getElementById('cartItems');
+  if(!cart.length){el.innerHTML='<div class="empty">Cart is empty! Add some products.</div>';return;}
+  el.innerHTML=cart.map(p=>`
+    <div class="cart-card">
+      <div class="oc-emoji">${p.emoji}</div>
+      <div class="oc-info">
+        <div class="oc-brand">${p.brand}</div>
+        <div class="oc-name">${p.name}</div>
+        <div class="oc-price">₹${p.price.toLocaleString()}</div>
+      </div>
+      <button class="btn-buy" style="width:100px" onclick="buyNow(${p.id})">⚡ Buy Now</button>
+      <button class="remove-btn" onclick="removeCart(${p.id})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function removeCart(id){
+  cart=cart.filter(c=>c.id!==id);
+  updateBadges(); renderCart(); showToast('Removed from Cart');
+}
+
+function renderWishlist(){
+  const el=document.getElementById('wishItems');
+  if(!wishlist.length){el.innerHTML='<div class="empty">Wishlist is empty! Heart some products.</div>';return;}
+  el.innerHTML=wishlist.map(p=>`
+    <div class="wish-card">
+      <div class="oc-emoji">${p.emoji}</div>
+      <div class="oc-info">
+        <div class="oc-brand">${p.brand}</div>
+        <div class="oc-name">${p.name}</div>
+        <div class="oc-price">₹${p.price.toLocaleString()} <span style="font-size:11px;color:#2e7d32">${p.disc}% off</span></div>
+      </div>
+      <button class="btn-buy" style="width:100px" onclick="addCart(${p.id})">🛒 Add to Cart</button>
+      <button class="remove-btn" onclick="removeWish(${p.id})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function removeWish(id){
+  wishlist=wishlist.filter(w=>w.id!==id);
+  updateBadges(); renderWishlist(); showToast('Removed from Wishlist');
+}
+
+function renderOrders(){
+  const el=document.getElementById('orderItems');
+  if(!orders.length){el.innerHTML='<div class="empty">No orders yet! Click Buy Now on any product.</div>';return;}
+  el.innerHTML=orders.map(p=>`
+    <div class="order-card">
+      <div class="oc-emoji">${p.emoji}</div>
+      <div class="oc-info">
+        <div class="oc-brand">${p.brand} • ${p.date}</div>
+        <div class="oc-name">${p.name}</div>
+        <div class="oc-price">₹${p.price.toLocaleString()}</div>
+        <div class="oc-status">✓ ${p.status} • Delivery Tomorrow</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterProds(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  currentList=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));
+  renderGrid(currentList);
+}
+
+function filterCat(cat){
+  currentList=products.filter(p=>p.cat===cat);
+  renderGrid(currentList);
+}
+
+function updatePrice(val){
+  document.getElementById('priceVal').textContent='₹'+parseInt(val).toLocaleString();
+  currentList=products.filter(p=>p.price<=val);
+  renderGrid(currentList);
+}
+
+function toggleSz(el){el.classList.toggle('on');}
+
+renderGrid(products);
+</script>
+</body>
+</html>
